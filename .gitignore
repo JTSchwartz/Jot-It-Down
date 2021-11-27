@@ -1,0 +1,13 @@
+.idea
+.gradle
+build
+node_modules
+target
+
+*.iml
+out
+gen
+
+package-lock.json
+webpack.config.js
+webpack.generated.js
