@@ -1,0 +1,43 @@
+html {
+	--content-height: 75vh;
+	--content-left-padding: 8px;
+	
+	--primary-color: rgb(30, 69, 95);
+	
+	--mono-font-family: "JetBrains Mono","Noto Mono","Fira Mono","Ubuntu Mono","Consolas",monospace;
+}
+
+vaadin-button {
+	background-color: var(--primary-color);
+}
+
+.format-as-json {
+	position: absolute;
+	right: 0;
+	margin-right: 0.5em;
+}
+
+vaadin-text-area {
+	height: var(--content-height);
+	max-height: var(--content-height);
+	width: calc(100vw - var(--content-left-padding));
+}
+
+.controls {
+	display: flex;
+	flex-direction: row;
+}
+
+.controls--inputs {
+	width: 70vw;
+}
+
+.controls--options {
+	padding-top: 2.5em;
+	
+	width: 15vw;
+}
+
+.controls--submit {
+	padding-top: 3.5em;
+}
