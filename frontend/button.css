@@ -1,0 +1,4 @@
+[part="prefix"] ::slotted(iron-icon) {
+	margin: 0;
+	color: white;
+}

@@ -3,13 +3,31 @@ html {
 	--content-left-padding: 8px;
 	
 	--primary-color: rgb(30, 69, 95);
+	--primary-disabled-color: rgba(30, 69, 95, 0.35);
+	
+	--button-font-color: white;
+	--button-disabled-font-color: rgba(255, 255, 255, 0.35);
 	
 	--mono-font-family: "JetBrains Mono","Noto Mono","Fira Mono","Ubuntu Mono","Consolas",monospace;
 }
 
 vaadin-button {
+	color: var(--button-font-color);
 	background-color: var(--primary-color);
 }
+
+vaadin-button[disabled] {
+	color: var(--button-disabled-font-color);
+	background-color: var(--primary-disabled-color);
+}
+
+vaadin-button, vaadin-checkbox {
+	cursor: pointer;
+}
+vaadin-button[disabled], vaadin-checkbox[disabled] {
+	cursor: not-allowed;
+}
+
 
 .toggle-theme {
 	position: absolute;
