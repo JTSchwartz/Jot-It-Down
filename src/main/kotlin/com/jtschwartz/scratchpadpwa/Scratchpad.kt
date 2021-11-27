@@ -3,6 +3,8 @@ package com.jtschwartz.scratchpadpwa
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.dependency.CssImport
+import com.vaadin.flow.component.icon.Icon
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.page.BodySize
 import com.vaadin.flow.component.page.Viewport
 import com.vaadin.flow.router.PageTitle
@@ -14,6 +16,7 @@ import com.vaadin.flow.theme.material.Material
 @Route("")
 @PageTitle("Scratchpad")
 @CssImport("styles.css")
+@CssImport("button.css", themeFor = "vaadin-button")
 @CssImport("text-area.css", themeFor = "vaadin-text-area")
 @CssImport("text-field.css", themeFor = "vaadin-text-field")
 @Theme(Material::class, variant = Material.DARK)
@@ -26,9 +29,9 @@ class Scratchpad: KComposite() {
 			appLayout {
 				navbar {
 					h3("Scratchpad")
-					button("Format As JSON") {
-						addThemeVariants(ButtonVariant.MATERIAL_CONTAINED)
-						classNames.add("format-as-json")
+					button(icon = Icon(VaadinIcon.LIGHTBULB)) {
+						addThemeVariants(ButtonVariant.MATERIAL_OUTLINED)
+						classNames.add("toggle-theme")
 					}
 				}
 				
@@ -68,6 +71,11 @@ class Scratchpad: KComposite() {
 							div {
 								classNames.add("controls--submit")
 								button("Search & Replace") {
+									addThemeVariants(ButtonVariant.MATERIAL_CONTAINED)
+								}
+								br {}
+								br {}
+								button("Format As JSON") {
 									addThemeVariants(ButtonVariant.MATERIAL_CONTAINED)
 								}
 							}

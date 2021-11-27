@@ -11,7 +11,7 @@ vaadin-button {
 	background-color: var(--primary-color);
 }
 
-.format-as-json {
+.toggle-theme {
 	position: absolute;
 	right: 0;
 	margin-right: 0.5em;
@@ -39,5 +39,7 @@ vaadin-text-area {
 }
 
 .controls--submit {
-	padding-top: 3.5em;
+	padding-top: 2em;
+	
+	text-align: center;
 }
