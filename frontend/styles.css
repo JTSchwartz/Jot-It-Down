@@ -1,4 +1,5 @@
 html {
+	--light-theme-background-color: rgb(217, 217, 217);
 	--content-height: 75vh;
 	--content-left-padding: 8px;
 	

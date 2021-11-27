@@ -20,6 +20,7 @@ defaultTasks("clean", "build")
 
 repositories {
     mavenCentral()
+    maven(url = "https://maven.vaadin.com/vaadin-addons")
 }
 
 gretty {
@@ -51,6 +52,7 @@ dependencies {
                "org.webjars.bowergithub.vaadin", "org.webjars.bowergithub.webcomponents")
             .forEach { exclude(group = it) }
     }
+    implementation("org.vaadin.addons:clientstorage:1.0.0")
     providedCompile("javax.servlet:javax.servlet-api:3.1.0")
     
     // logging

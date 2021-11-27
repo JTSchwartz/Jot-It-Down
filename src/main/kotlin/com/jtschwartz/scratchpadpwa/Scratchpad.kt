@@ -2,6 +2,7 @@ package com.jtschwartz.scratchpadpwa
 
 import com.github.mvysny.karibudsl.v10.*
 import com.google.gson.*
+import com.jtschwartz.scratchpadpwa.utils.Functionality
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.checkbox.Checkbox
@@ -40,7 +41,6 @@ class Scratchpad: KComposite() {
 	
 	private lateinit var isRegexEnabled: Checkbox
 	private lateinit var isCaseSensitive: Checkbox
-	private lateinit var isSelectionLimitEnabled: Checkbox
 	
 	private lateinit var origin: TextArea
 	private lateinit var search: TextField
@@ -58,9 +58,9 @@ class Scratchpad: KComposite() {
 	}
 	
 	init {
+		UI.getCurrent().element.themeList.add(Material.DARK)
+		
 		ui {
-			UI.getCurrent().element.themeList.add(Material.DARK)
-			
 			appLayout {
 				navbar {
 					h3("Scratchpad")
@@ -78,7 +78,7 @@ class Scratchpad: KComposite() {
 							isAutofocus = true
 							valueChangeMode = ValueChangeMode.EAGER
 							addValueChangeListener {
-								formatOriginAsJson()
+								processOriginContents()
 							}
 						}
 						hr {}
@@ -88,6 +88,10 @@ class Scratchpad: KComposite() {
 								classNames.add("controls--inputs")
 								search = textField {
 									label = "Search"
+									valueChangeMode = ValueChangeMode.EAGER
+									addValueChangeListener {
+										searchAndReplace.isEnabled = value.isNotEmpty()
+									}
 								}
 								replace = textField {
 									label = "Replace"
@@ -97,23 +101,23 @@ class Scratchpad: KComposite() {
 								classNames.add("controls--options")
 								isRegexEnabled = checkBox {
 									label = "Use Regex"
+									onLeftClick { isCaseSensitive.isEnabled = !value }
 								}
 								br {}
 								isCaseSensitive = checkBox {
 									label = "Case Sensitivity"
 								}
-								br {}
-								isSelectionLimitEnabled = checkBox {
-									label = "Limit to Selection"
-								}
 							}
 							div {
 								classNames.add("controls--submit")
 								searchAndReplace = button("Search & Replace") {
+									isEnabled = false
+									onLeftClick { searchAndReplace() }
 								}
 								br {}
 								br {}
 								formatAsJson = button("Format As JSON") {
+									isEnabled = false
 									onLeftClick { replaceOriginWithFormattedJson() }
 								}
 							}
@@ -124,12 +128,24 @@ class Scratchpad: KComposite() {
 		}
 	}
 	
-	private fun formatOriginAsJson() {
-		try {
-			formattedJson = gson.toJson(gson.fromJson(origin.value, Any::class.java))
-			formatAsJson.isEnabled = true
-		} catch (e: Exception) {
+	private fun searchAndReplace() {
+		origin.value = if (isRegexEnabled.value) {
+			origin.value.replace(search.value.toRegex(), replace.value)
+		} else {
+			origin.value.replace(search.value, replace.value, !isCaseSensitive.value)
+		}
+	}
+	
+	private fun processOriginContents() {
+		if (origin.value.isBlank()) {
 			formatAsJson.isEnabled = false
+		} else {
+			try {
+				formattedJson = gson.toJson(gson.fromJson(origin.value, Any::class.java))
+				formatAsJson.isEnabled = true
+			} catch (e: Exception) {
+				formatAsJson.isEnabled = false
+			}
 		}
 	}
 	
