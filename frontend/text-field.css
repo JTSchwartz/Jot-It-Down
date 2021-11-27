@@ -1,0 +1,10 @@
+:host {
+	margin-left: 0.5vw;
+	padding: 0;
+	
+	width: 65vw;
+}
+
+input {
+	font-family: var(--mono-font-family);
+}

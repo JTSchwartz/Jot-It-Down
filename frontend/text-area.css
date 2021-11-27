@@ -1,0 +1,18 @@
+:host {
+	--_material-text-field-input-line-background-color: transparent;
+	
+	margin-left: var(--content-left-padding);
+}
+
+textarea {
+	height: calc(var(--content-height) - 2.5vh);
+	max-height: calc(var(--content-height) - 2.5vh);
+	
+	overflow-y: scroll;
+	
+	font-family: var(--mono-font-family);
+}
+
+[part="input-field"]::after {
+	height: 0 !important;
+}
