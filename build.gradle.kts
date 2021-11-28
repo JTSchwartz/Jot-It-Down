@@ -13,6 +13,7 @@ plugins {
     id("org.gretty") version "3.0.6"
     war
     id("com.vaadin") version "0.14.7.3"
+    id("com.google.cloud.tools.jib") version "3.1.4"
 }
 
 defaultTasks("clean", "build")
@@ -37,8 +38,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
-
-val staging by configurations.creating
 
 dependencies {
     implementation("eu.vaadinonkotlin:vok-framework-vokdb:$vVOK")
@@ -71,9 +70,22 @@ java {
 }
 
 vaadin {
+    if (gradle.startParameter.taskNames.contains("jib")) {
+        productionMode = true
+    }
+    
     pnpmEnable = false
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+jib {
+    to {
+        image = "gcr.io/web-apps-327720/jot-it-down"
+    }
+    from {
+        image = "jetty:9.4.40-jre11"
+    }
+    container {
+        appRoot = "/var/lib/jetty/webapps/ROOT"
+        user = "root" // otherwise we'll get https://github.com/appropriate/docker-jetty/issues/80
+    }
 }
