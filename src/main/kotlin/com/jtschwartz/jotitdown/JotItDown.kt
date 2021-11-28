@@ -139,6 +139,10 @@ class JotItDown: KComposite() {
 									}
 								}
 							}
+							button(icon = Icon(VaadinIcon.CODE)) {
+								classNames.add("source-code-link")
+								onLeftClick { UI.getCurrent().page.open("https://github.com/JTSchwartz/Jot-It-Down") }
+							}
 						}
 					}
 				}

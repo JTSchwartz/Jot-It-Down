@@ -25,6 +25,17 @@ vaadin-button[disabled] {
 	background-color: var(--primary-disabled-color);
 }
 
+vaadin-button.source-code-link {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	
+	height: 3em;
+	width: 3em;
+	
+	background-color: transparent;
+}
+
 vaadin-button, vaadin-checkbox {
 	cursor: pointer;
 }
