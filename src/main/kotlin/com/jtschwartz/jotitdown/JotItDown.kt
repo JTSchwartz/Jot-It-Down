@@ -1,8 +1,8 @@
-package com.jtschwartz.scratchpadpwa
+package com.jtschwartz.jotitdown
 
 import com.github.mvysny.karibudsl.v10.*
 import com.google.gson.*
-import com.jtschwartz.scratchpadpwa.utils.Functionality
+import com.jtschwartz.jotitdown.utils.Functionality
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.checkbox.Checkbox
@@ -21,20 +21,20 @@ import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.material.Material
 
 @Route("")
-@PageTitle("Scratchpad")
+@PageTitle("Jot It Down")
 @CssImport.Container(
 	value = [
-		CssImport("styles.css"),
-		CssImport("button.css", themeFor = "vaadin-button"),
-		CssImport("text-area.css", themeFor = "vaadin-text-area"),
-		CssImport("text-field.css", themeFor = "vaadin-text-field")
+		CssImport("./styles.css"),
+		CssImport("./button.css", themeFor = "vaadin-button"),
+		CssImport("./text-area.css", themeFor = "vaadin-text-area"),
+		CssImport("./text-field.css", themeFor = "vaadin-text-field")
 	]
                     )
 @Theme(Material::class)
 @BodySize(width = "100vw", height = "100vh")
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes")
-@PWA(name = "Scratchpad", shortName = "Scratchpad", iconPath = "icons/icon-512.png", themeColor = "#333333", backgroundColor = "#333333")
-class Scratchpad: KComposite() {
+@PWA(name = "Jot It Down", shortName = "Jot It Down", iconPath = "icons/icon-512.png", themeColor = "#333333", backgroundColor = "#333333")
+class JotItDown: KComposite() {
 	private lateinit var toggleTheme: Button
 	private lateinit var searchAndReplace: Button
 	private lateinit var formatAsJson: Button
@@ -63,7 +63,7 @@ class Scratchpad: KComposite() {
 		ui {
 			appLayout {
 				navbar {
-					h3("Scratchpad")
+					h3("Jot It Down")
 					toggleTheme = button(icon = Icon(VaadinIcon.LIGHTBULB)) {
 						classNames.add("toggle-theme")
 						onLeftClick { Functionality.toggleTheme() }

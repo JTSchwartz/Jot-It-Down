@@ -1,4 +1,4 @@
-package com.jtschwartz.scratchpadpwa.utils
+package com.jtschwartz.jotitdown.utils
 
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.dom.ThemeList

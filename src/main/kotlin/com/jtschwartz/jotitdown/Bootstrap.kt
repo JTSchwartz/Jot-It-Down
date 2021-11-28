@@ -1,4 +1,4 @@
-package com.jtschwartz.scratchpadpwa
+package com.jtschwartz.jotitdown
 
 import eu.vaadinonkotlin.VaadinOnKotlin
 import org.slf4j.LoggerFactory

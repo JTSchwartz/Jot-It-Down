@@ -1,1 +1,1 @@
-rootProject.name = "ScratchpadPWA"
+rootProject.name = "JotItDown"
