@@ -1,7 +1,11 @@
 package com.jtschwartz.jotitdown
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.github.mvysny.karibudsl.v10.*
 import com.google.gson.*
+import com.jtschwartz.jotitdown.utils.FormatTypes
 import com.jtschwartz.jotitdown.utils.Functionality
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
@@ -26,18 +30,18 @@ import com.vaadin.flow.theme.material.Material
 	value = [
 		CssImport("./styles.css"),
 		CssImport("./button.css", themeFor = "vaadin-button"),
+		CssImport("./select.css", themeFor = "vaadin-select"),
 		CssImport("./text-area.css", themeFor = "vaadin-text-area"),
 		CssImport("./text-field.css", themeFor = "vaadin-text-field")
-	]
-                    )
+	])
 @Theme(Material::class)
 @BodySize(width = "100vw", height = "100vh")
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes")
 @PWA(name = "Jot It Down", shortName = "Jot It Down", iconPath = "icons/icon-512.png", themeColor = "#333333", backgroundColor = "#333333")
 class JotItDown: KComposite() {
-	private lateinit var toggleTheme: Button
-	private lateinit var searchAndReplace: Button
-	private lateinit var formatAsJson: Button
+	private lateinit var toggleThemeButton: Button
+	private lateinit var searchAndReplaceButton: Button
+	private lateinit var formatAsButton: Button
 	
 	private lateinit var isRegexEnabled: Checkbox
 	private lateinit var isCaseSensitive: Checkbox
@@ -46,15 +50,21 @@ class JotItDown: KComposite() {
 	private lateinit var search: TextField
 	private lateinit var replace: TextField
 	
-	private var formattedJson: String? = null
+	private var formatted: String? = null
+	private var dataFormat: FormatTypes = FormatTypes.JSON
 	
 	companion object {
-		val gson: Gson = GsonBuilder()
+		private val gson: Gson = GsonBuilder()
 			.setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
 			.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
 			.serializeNulls()
 			.setPrettyPrinting()
 			.create()
+		
+		private val yaml = ObjectMapper(YAMLFactory().enable(YAMLGenerator.Feature.MINIMIZE_QUOTES).disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER))
+		
+		val formatAsJSON = { original: String -> gson.toJson(gson.fromJson(original, Any::class.java)) }
+		val formatAsYAML = { original: String -> yaml.writeValueAsString(yaml.readValue(original, Any::class.java)) }
 	}
 	
 	init {
@@ -64,7 +74,7 @@ class JotItDown: KComposite() {
 			appLayout {
 				navbar {
 					h3("Jot It Down")
-					toggleTheme = button(icon = Icon(VaadinIcon.LIGHTBULB)) {
+					toggleThemeButton = button(icon = Icon(VaadinIcon.LIGHTBULB)) {
 						classNames.add("toggle-theme")
 						onLeftClick { Functionality.toggleTheme() }
 					}
@@ -90,7 +100,7 @@ class JotItDown: KComposite() {
 									label = "Search"
 									valueChangeMode = ValueChangeMode.EAGER
 									addValueChangeListener {
-										searchAndReplace.isEnabled = value.isNotEmpty()
+										searchAndReplaceButton.isEnabled = value.isNotEmpty()
 									}
 								}
 								replace = textField {
@@ -110,15 +120,23 @@ class JotItDown: KComposite() {
 							}
 							div {
 								classNames.add("controls--submit")
-								searchAndReplace = button("Search & Replace") {
+								searchAndReplaceButton = button("Search & Replace") {
 									isEnabled = false
 									onLeftClick { searchAndReplace() }
 								}
 								br {}
 								br {}
-								formatAsJson = button("Format As JSON") {
+								formatAsButton = button("Format As") {
 									isEnabled = false
 									onLeftClick { replaceOriginWithFormattedJson() }
+								}
+								select<FormatTypes> {
+									setItems(FormatTypes.JSON, FormatTypes.YAML)
+									value = FormatTypes.JSON
+									addValueChangeListener {
+										dataFormat = value
+										processOriginContents()
+									}
 								}
 							}
 						}
@@ -138,18 +156,23 @@ class JotItDown: KComposite() {
 	
 	private fun processOriginContents() {
 		if (origin.value.isBlank()) {
-			formatAsJson.isEnabled = false
-		} else {
-			try {
-				formattedJson = gson.toJson(gson.fromJson(origin.value, Any::class.java))
-				formatAsJson.isEnabled = true
-			} catch (e: Exception) {
-				formatAsJson.isEnabled = false
-			}
+			formatAsButton.isEnabled = false
+			return
 		}
+		
+		try {
+			formatted = when (dataFormat) {
+				FormatTypes.JSON -> formatAsJSON(origin.value)
+				FormatTypes.YAML -> formatAsYAML(origin.value)
+			}
+			formatAsButton.isEnabled = true
+		} catch (e: Exception) {
+			formatAsButton.isEnabled = false
+		}
+		
 	}
 	
 	private fun replaceOriginWithFormattedJson() {
-		origin.value = formattedJson
+		origin.value = formatted
 	}
 }

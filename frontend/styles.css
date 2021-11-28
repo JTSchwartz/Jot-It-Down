@@ -1,5 +1,6 @@
 html {
 	--light-theme-background-color: rgb(217, 217, 217);
+	
 	--content-height: 75vh;
 	--content-left-padding: 8px;
 	
@@ -29,11 +30,8 @@ vaadin-button[disabled], vaadin-checkbox[disabled] {
 	cursor: not-allowed;
 }
 
-
-.toggle-theme {
-	position: absolute;
-	right: 0;
-	margin-right: 0.5em;
+vaadin-select {
+	width: 30%;
 }
 
 vaadin-text-area {
@@ -48,7 +46,7 @@ vaadin-text-area {
 }
 
 .controls--inputs {
-	width: 70vw;
+	width: 60vw;
 }
 
 .controls--options {
@@ -61,4 +59,10 @@ vaadin-text-area {
 	padding-top: 2em;
 	
 	text-align: center;
+}
+
+.toggle-theme {
+	position: absolute;
+	right: 0;
+	margin-right: 0.5em;
 }

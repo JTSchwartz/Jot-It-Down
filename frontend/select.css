@@ -1,0 +1,3 @@
+:host {
+	--material-primary-color: var(--primary-color);
+}
