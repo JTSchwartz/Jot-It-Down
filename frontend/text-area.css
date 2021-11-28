@@ -1,7 +1,7 @@
 :host {
 	--_material-text-field-input-line-background-color: transparent;
 	
-	margin-left: var(--content-left-padding);
+	margin-left: var(--content-inset);
 }
 
 textarea {

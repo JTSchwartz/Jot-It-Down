@@ -1,8 +1,10 @@
 html {
 	--light-theme-background-color: rgb(217, 217, 217);
 	
+	--content-inset: 8px;
+	--input-inset: calc(3 * var(--content-inset));
+	
 	--content-height: 75vh;
-	--content-left-padding: 8px;
 	
 	--primary-color: rgb(30, 69, 95);
 	--primary-disabled-color: rgba(30, 69, 95, 0.35);
@@ -32,12 +34,13 @@ vaadin-button[disabled], vaadin-checkbox[disabled] {
 
 vaadin-select {
 	width: 30%;
+	padding-left: var(--input-inset);
 }
 
 vaadin-text-area {
 	height: var(--content-height);
 	max-height: var(--content-height);
-	width: calc(100vw - var(--content-left-padding));
+	width: calc(100vw - var(--content-inset));
 }
 
 .controls {
@@ -46,23 +49,21 @@ vaadin-text-area {
 }
 
 .controls--inputs {
+	padding-left: var(--input-inset);
 	width: 60vw;
 }
 
 .controls--options {
-	padding-top: 2.5em;
-	
+	padding-top: 3.5em;
 	width: 15vw;
 }
 
 .controls--submit {
 	padding-top: 2em;
-	
-	text-align: center;
 }
 
 .toggle-theme {
 	position: absolute;
 	right: 0;
-	margin-right: 0.5em;
+	margin-right: var(--input-inset);
 }
