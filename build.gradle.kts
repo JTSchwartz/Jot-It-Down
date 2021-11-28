@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 group = "com.jacobschwartz"
-version = "1.0"
+version = "2.0"
 
 val vVOK: String by rootProject
 val vVaadin: String by rootProject
