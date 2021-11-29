@@ -68,8 +68,7 @@ class JotItDown: KComposite() {
 	}
 	
 	init {
-		UI.getCurrent().element.themeList.add(Material.DARK)
-		
+		Functionality.preferredTheme()
 		ui {
 			appLayout {
 				navbar {

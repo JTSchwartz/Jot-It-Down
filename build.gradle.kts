@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 group = "com.jacobschwartz"
-version = "2.0"
+version = "2.1"
 
 val vVOK: String by rootProject
 val vVaadin: String by rootProject
@@ -86,6 +86,6 @@ jib {
     }
     container {
         appRoot = "/var/lib/jetty/webapps/ROOT"
-        user = "root" // otherwise we'll get https://github.com/appropriate/docker-jetty/issues/80
+        user = "root"
     }
 }
