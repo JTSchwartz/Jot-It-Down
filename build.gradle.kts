@@ -87,11 +87,12 @@ jib {
     to {
         image = "gcr.io/web-apps-327720/jot-it-down"
         auth {
-            val GCLOUD_USERNAME: String by project
+            val gcloud_username: String by project
             val gcloud_password: String by project
-            if (project.hasProperty("gcloud_username") && project.hasProperty("gcloud_password"))
-            username = GCLOUD_USERNAME
-            password = gcloud_password
+            if (project.hasProperty("gcloud_username") && project.hasProperty("gcloud_password")) {
+                username = gcloud_username
+                password = gcloud_password
+            }
         }
     }
     from {
