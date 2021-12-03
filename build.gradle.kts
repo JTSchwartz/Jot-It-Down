@@ -58,10 +58,16 @@ dependencies {
     // Kotlin
     implementation(kotlin("stdlib-jdk8"))
     
-    //GSON
+    // Formatting
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
+    
+    // Testing
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("io.mockk:mockk:1.12.1")
+    
 }
 
 java {

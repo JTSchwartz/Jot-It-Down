@@ -6,7 +6,10 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.github.mvysny.karibudsl.v10.*
 import com.google.gson.*
 import com.jtschwartz.jotitdown.utils.FormatTypes
-import com.jtschwartz.jotitdown.utils.Functionality
+import com.jtschwartz.jotitdown.utils.ThemeUtils
+import com.jtschwartz.jotitdown.utils.Utils.processOriginContents
+import com.jtschwartz.jotitdown.utils.Utils.replaceOriginWithFormatted
+import com.jtschwartz.jotitdown.utils.Utils.searchAndReplace
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.checkbox.Checkbox
@@ -41,17 +44,17 @@ import com.vaadin.flow.theme.material.Material
 class JotItDown: KComposite() {
 	private lateinit var toggleThemeButton: Button
 	private lateinit var searchAndReplaceButton: Button
-	private lateinit var formatAsButton: Button
+	lateinit var formatAsButton: Button
 	
-	private lateinit var isRegexEnabled: Checkbox
-	private lateinit var isCaseSensitive: Checkbox
+	lateinit var isRegexEnabled: Checkbox
+	lateinit var isCaseSensitive: Checkbox
 	
-	private lateinit var origin: TextArea
-	private lateinit var search: TextField
-	private lateinit var replace: TextField
+	lateinit var origin: TextArea
+	lateinit var search: TextField
+	lateinit var replace: TextField
 	
-	private var formatted: String? = null
-	private var dataFormat: FormatTypes = FormatTypes.JSON
+	var formatted: String? = null
+	var dataFormat: FormatTypes = FormatTypes.JSON
 	
 	companion object {
 		private val gson: Gson = GsonBuilder()
@@ -68,14 +71,14 @@ class JotItDown: KComposite() {
 	}
 	
 	init {
-		Functionality.preferredTheme()
+		ThemeUtils.preferredTheme()
 		ui {
 			appLayout {
 				navbar {
 					h3("Jot It Down")
 					toggleThemeButton = button(icon = Icon(VaadinIcon.LIGHTBULB)) {
 						classNames.add("toggle-theme")
-						onLeftClick { Functionality.toggleTheme() }
+						onLeftClick { ThemeUtils.toggleTheme() }
 					}
 				}
 				
@@ -127,7 +130,7 @@ class JotItDown: KComposite() {
 								br {}
 								formatAsButton = button("Format As") {
 									isEnabled = false
-									onLeftClick { replaceOriginWithFormattedJson() }
+									onLeftClick { replaceOriginWithFormatted() }
 								}
 								select<FormatTypes> {
 									setItems(FormatTypes.JSON, FormatTypes.YAML)
@@ -147,35 +150,5 @@ class JotItDown: KComposite() {
 				}
 			}
 		}
-	}
-	
-	private fun searchAndReplace() {
-		origin.value = if (isRegexEnabled.value) {
-			origin.value.replace(search.value.toRegex(), replace.value)
-		} else {
-			origin.value.replace(search.value, replace.value, !isCaseSensitive.value)
-		}
-	}
-	
-	private fun processOriginContents() {
-		if (origin.value.isBlank()) {
-			formatAsButton.isEnabled = false
-			return
-		}
-		
-		try {
-			formatted = when (dataFormat) {
-				FormatTypes.JSON -> formatAsJSON(origin.value)
-				FormatTypes.YAML -> formatAsYAML(origin.value)
-			}
-			formatAsButton.isEnabled = true
-		} catch (e: Exception) {
-			formatAsButton.isEnabled = false
-		}
-		
-	}
-	
-	private fun replaceOriginWithFormattedJson() {
-		origin.value = formatted
 	}
 }
