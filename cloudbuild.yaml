@@ -1,14 +1,8 @@
 steps:
     - name: 'gradle:7.3-jdk8'
       entrypoint: 'gradle'
-      args: ['jib']
-      id: 'Build & Upload Image'
-    - name: 'gradle:7.3-jdk8'
-      entrypoint: 'gradle'
-      args: ['test']
-      waitFor: ['-']
-      id: 'Test'
+      args: ['test', 'jib']
+      id: 'Test & Upload Image'
     - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
       args: ['gcloud', 'run', 'services', 'update', 'jot-it-down', '--image', 'gcr.io/web-apps-327720/jot-it-down:latest']
-      waitFor: ['Test']
       id: 'Deployment'
