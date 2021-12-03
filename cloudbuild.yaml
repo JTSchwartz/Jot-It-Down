@@ -3,7 +3,8 @@ steps:
       entrypoint: 'gradle'
       args: ['test']
       id: 'Test'
-    - name: 'gcr.io/cloud-builders/gradle'
+    - name: 'gradle:7.3-jdk8'
+      entrypoint: 'gradle'
       args: ['jib']
       id: 'Build & Upload Image'
     - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
