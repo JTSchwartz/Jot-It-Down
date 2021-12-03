@@ -86,14 +86,6 @@ vaadin {
 jib {
     to {
         image = "gcr.io/web-apps-327720/jot-it-down"
-        auth {
-            val gcloud_username: String by project
-            val gcloud_password: String by project
-            if (project.hasProperty("gcloud_username") && project.hasProperty("gcloud_password")) {
-                username = gcloud_username
-                password = gcloud_password
-            }
-        }
     }
     from {
         image = "jetty:9.4.40-jre11"
