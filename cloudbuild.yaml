@@ -4,5 +4,5 @@ steps:
       args: ['test', 'jib']
       id: 'Test & Upload Image'
     - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-      args: ['gcloud', 'run', 'services', 'update', 'jot-it-down', '--image', 'gcr.io/web-apps-327720/jot-it-down:latest']
+      args: ['gcloud', 'run', 'services', 'update', 'jot-it-down', '--region', 'us-central1', '--image', 'gcr.io/web-apps-327720/jot-it-down:latest']
       id: 'Deployment'
