@@ -52,6 +52,8 @@ vaadin-text-area {
 	height: var(--content-height);
 	max-height: var(--content-height);
 	width: calc(100vw - var(--content-inset));
+	padding-top: 0;
+	margin-bottom: 0;
 }
 
 .controls {

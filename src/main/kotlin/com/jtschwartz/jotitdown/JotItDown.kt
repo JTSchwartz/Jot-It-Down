@@ -93,7 +93,9 @@ class JotItDown: KComposite() {
 								processOriginContents()
 							}
 						}
-						hr {}
+						hr {
+							style.set("margin-top", "0")
+						}
 						div {
 							classNames.add("controls")
 							div {
