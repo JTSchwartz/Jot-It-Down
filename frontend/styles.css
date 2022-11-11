@@ -16,6 +16,7 @@ html {
 }
 
 vaadin-button {
+	margin-right: var(--content-inset);
 	color: var(--button-font-color);
 	background-color: var(--primary-color);
 }

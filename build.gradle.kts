@@ -57,6 +57,7 @@ dependencies {
     
     // Kotlin
     implementation(kotlin("stdlib-jdk8"))
+    implementation("com.jtschwartz:chorecore:3.1.0")
     
     // Formatting
     implementation("com.google.code.gson:gson:2.8.9")

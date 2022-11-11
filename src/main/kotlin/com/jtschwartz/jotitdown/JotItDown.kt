@@ -4,12 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.select
 import com.google.gson.*
+import com.jtschwartz.chorecore.*
 import com.jtschwartz.jotitdown.utils.FormatTypes
 import com.jtschwartz.jotitdown.utils.ThemeUtils
 import com.jtschwartz.jotitdown.utils.Utils.processOriginContents
 import com.jtschwartz.jotitdown.utils.Utils.replaceOriginWithFormatted
-import com.jtschwartz.jotitdown.utils.Utils.searchAndReplace
+import com.jtschwartz.jotitdown.utils.Utils.replaceAll
+import com.jtschwartz.jotitdown.utils.Utils.replaceRange
+import com.jtschwartz.jotitdown.utils.Utils.search
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.checkbox.Checkbox
@@ -43,11 +47,14 @@ import com.vaadin.flow.theme.material.Material
 @PWA(name = "Jot It Down", shortName = "Jot It Down", iconPath = "icons/icon-512.png", themeColor = "#333333", backgroundColor = "#333333")
 class JotItDown: KComposite() {
 	private lateinit var toggleThemeButton: Button
-	private lateinit var searchAndReplaceButton: Button
+	private lateinit var searchButton: Button
+	private lateinit var replaceButton: Button
+	private lateinit var replaceAllButton: Button
 	lateinit var formatAsButton: Button
 	
 	lateinit var isRegexEnabled: Checkbox
 	lateinit var isCaseSensitive: Checkbox
+	
 	
 	lateinit var origin: TextArea
 	lateinit var search: TextField
@@ -55,6 +62,8 @@ class JotItDown: KComposite() {
 	
 	var formatted: String? = null
 	var dataFormat: FormatTypes = FormatTypes.JSON
+	var selectionIndex = 0
+	var selectionRange: IntRange? = null
 	
 	companion object {
 		private val gson: Gson = GsonBuilder()
@@ -104,11 +113,26 @@ class JotItDown: KComposite() {
 									label = "Search"
 									valueChangeMode = ValueChangeMode.EAGER
 									addValueChangeListener {
-										searchAndReplaceButton.isEnabled = value.isNotEmpty()
+										selectionIndex = 0
+										val searchEnabled = value.isNotEmpty()
+										val replaceEnabled = replace.value.isNotEmpty()
+										
+										when {
+											!searchEnabled -> listOf(searchButton, replaceButton, replaceAllButton).forEach { it.isEnabled = false }
+											replaceEnabled -> listOf(searchButton, replaceButton, replaceAllButton).forEach { it.isEnabled = true }
+											else -> searchButton.isEnabled = true
+										}
 									}
 								}
 								replace = textField {
 									label = "Replace"
+									valueChangeMode = ValueChangeMode.EAGER
+									addValueChangeListener {
+										val replaceEnabled = value.isNotEmpty()
+										val searchEnabled = search.value.isNotEmpty()
+										
+										listOf(replaceButton, replaceAllButton).forEach { it.isEnabled = replaceEnabled && searchEnabled }
+									}
 								}
 							}
 							div {
@@ -124,9 +148,31 @@ class JotItDown: KComposite() {
 							}
 							div {
 								classNames.add("controls--submit")
-								searchAndReplaceButton = button("Search & Replace") {
+								searchButton = button("Search") {
 									isEnabled = false
-									onLeftClick { searchAndReplace() }
+									onLeftClick {
+										selectionRange = search(selectionIndex)?.apply {
+											if (this.first >= 0) {
+												origin.focus()
+												origin.select(this)
+											}
+											selectionIndex = last + 1
+										}
+										
+										if (selectionRange == null) selectionIndex = 0
+									}
+								}
+								
+								replaceButton = button("Replace") {
+									isEnabled = false
+									onLeftClick {
+										selectionRange?.let { replaceRange(selectionRange!!) }
+									}
+									
+								}
+								replaceAllButton = button("Replace All") {
+									isEnabled = false
+									onLeftClick { replaceAll() }
 								}
 								br {}
 								br {}

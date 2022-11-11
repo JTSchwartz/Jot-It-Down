@@ -1,7 +1,7 @@
 package com.jtschwartz.jotitdown.utils
 
 import com.jtschwartz.jotitdown.JotItDown
-import com.jtschwartz.jotitdown.utils.Utils.searchAndReplace
+import com.jtschwartz.jotitdown.utils.Utils.replaceAll
 import io.mockk.every
 import io.mockk.mockkObject
 import org.junit.jupiter.api.*
@@ -68,7 +68,7 @@ internal class UtilsTest {
 		app.apply{
 			search.value = searchFor
 			replace.value = replaceWith
-			searchAndReplace()
+			replaceAll()
 			assertEquals(expected, app.origin.value)
 		}
 	}
@@ -80,7 +80,7 @@ internal class UtilsTest {
 			search.value = searchFor
 			replace.value = replaceWith
 			isRegexEnabled.value = true
-			searchAndReplace()
+			replaceAll()
 			assertEquals(expected, app.origin.value)
 		}
 	}

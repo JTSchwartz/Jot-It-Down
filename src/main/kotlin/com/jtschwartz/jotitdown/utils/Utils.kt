@@ -14,7 +14,25 @@ object Utils {
 		Cookies += Cookie(key, value).apply { maxAge = expirationInSeconds }
 	}
 	
-	fun JotItDown.searchAndReplace() {
+	fun JotItDown.search(i: Int): IntRange? {
+		return if (isRegexEnabled.value) {
+			search.value.toRegex().find(origin.value, i)?.range
+		} else {
+			val index = origin.value.indexOf(search.value, i)
+			index until index + search.value.length
+		}
+	}
+	
+	fun JotItDown.replaceRange(range: IntRange) {
+		origin.value = if (isRegexEnabled.value) {
+			val replacementSlice = origin.value.slice(range).replace(search.value.toRegex(), replace.value)
+			origin.value.replaceRange(range, replacementSlice)
+		} else {
+			origin.value.replaceRange(range, replace.value)
+		}
+	}
+	
+	fun JotItDown.replaceAll() {
 		origin.value = if (isRegexEnabled.value) {
 			origin.value.replace(search.value.toRegex(), replace.value)
 		} else {
